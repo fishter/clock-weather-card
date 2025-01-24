@@ -210,10 +210,10 @@ export class ClockWeatherCard extends LitElement {
     const weather = this.getWeather()
     const state = weather.state
     const temp = this.getCurrentTemperature() !== null ? this.getCurrentTemperature() : -273
-    const temp_disp = this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
+    const temp_disp = this.config.show_decimal ? temp : roundIfNotNull(temp)
     const tempUnit = weather.attributes.temperature_unit
     const apparentTemp = this.getApparentTemperature() !== null ? this.getApparentTemperature() : -273
-    const apparentTemp_disp = this.config.show_decimal ? this.getApparentTemperature() : roundIfNotNull(this.getApparentTemperature())
+    const apparentTemp_disp = this.config.show_decimal ? apparentTemp : roundIfNotNull(apparentTemp)
     const aqi = this.getAqi()
     const aqiColor = this.getAqiColor(aqi)
     const humidity = roundIfNotNull(this.getCurrentHumidity())
@@ -221,10 +221,10 @@ export class ClockWeatherCard extends LitElement {
     const icon = this.toIcon(state, iconType, false, this.getIconAnimationKind())
     const weatherString = this.localize(`weather.${state}`)
     const localizedTemp = temp !== null ? this.toConfiguredTempWithUnit(tempUnit, temp) : -273
-    const localizedTemp_disp = temp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, temp) : -273
+    const localizedTemp_disp = temp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, temp_disp) : -273
     const localizedHumidity = humidity !== null ? `${humidity}% ${this.localize('misc.humidity')}` : -1
     const localizedApparent = apparentTemp !== null ? this.toConfiguredTempWithUnit(tempUnit, apparentTemp) : -273
-    const localizedApparent_disp = apparentTemp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, apparentTemp) : -273
+    const localizedApparent_disp = apparentTemp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, apparentTemp_disp) : -273
     const apparentString = this.localize('misc.feels-like')
     const aqiString = this.localize('misc.aqi')
 
@@ -252,8 +252,8 @@ export class ClockWeatherCard extends LitElement {
 
   private renderForecast (): TemplateResult[] {
     const weather = this.getWeather()
-    const currentTemp = this.getCurrentTemperature !== null ? this.getCurrentTemperature : null
-    const currentTemp_disp = this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
+    const currentTemp = this.getCurrentTemperature !== null ? this.getCurrentTemperature : -273
+    const currentTemp_disp = this.config.show_decimal ? currentTemp : roundIfNotNull(currentTemp)
     const maxRowsCount = this.config.forecast_rows
     const hourly = this.config.hourly_forecast
     const temperatureUnit = weather.attributes.temperature_unit
