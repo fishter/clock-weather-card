@@ -209,9 +209,11 @@ export class ClockWeatherCard extends LitElement {
   private renderToday (): TemplateResult {
     const weather = this.getWeather()
     const state = weather.state
-    const temp = this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
+    const temp = this.getCurrentTemperature() !== null ? this.getCurrentTemperature() : null
+	const temp_disp = this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
     const tempUnit = weather.attributes.temperature_unit
-    const apparentTemp = this.config.show_decimal ? this.getApparentTemperature() : roundIfNotNull(this.getApparentTemperature())
+    const apparentTemp = this.getApparentTemperature() !== null this.getApparentTemperature() : null
+	const apparentTemp_disp = this.config.show_decimal ? this.getApparentTemperature() : roundIfNotNull(this.getApparentTemperature())
     const aqi = this.getAqi()
     const aqiColor = this.getAqiColor(aqi)
     const humidity = roundIfNotNull(this.getCurrentHumidity())
@@ -219,9 +221,11 @@ export class ClockWeatherCard extends LitElement {
     const icon = this.toIcon(state, iconType, false, this.getIconAnimationKind())
     const weatherString = this.localize(`weather.${state}`)
     const localizedTemp = temp !== null ? this.toConfiguredTempWithUnit(tempUnit, temp) : null
+	const localizedTemp_disp = temp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, temp) : null
     const localizedHumidity = humidity !== null ? `${humidity}% ${this.localize('misc.humidity')}` : null
     const localizedApparent = apparentTemp !== null ? this.toConfiguredTempWithUnit(tempUnit, apparentTemp) : null
-    const apparentString = this.localize('misc.feels-like')
+    const localizedApparent_disp = apparentTemp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, apparentTemp) : null
+	const apparentString = this.localize('misc.feels-like')
     const aqiString = this.localize('misc.aqi')
 
     return html`
@@ -231,13 +235,13 @@ export class ClockWeatherCard extends LitElement {
       <clock-weather-card-today-right>
         <clock-weather-card-today-right-wrap>
           <clock-weather-card-today-right-wrap-top>
-            ${this.config.hide_clock ? weatherString : localizedTemp ? `${weatherString}, ${localizedTemp}` : weatherString}
+            ${this.config.hide_clock ? weatherString : localizedTemp ? `${weatherString}, ${localizedTemp_disp}` : weatherString}
             ${this.config.show_humidity && localizedHumidity ? html`<br>${localizedHumidity}` : ''}
-            ${this.config.apparent_sensor && apparentTemp ? html`<br>${apparentString}: ${localizedApparent}` : ''}
+            ${this.config.apparent_sensor && apparentTemp_disp ? html`<br>${apparentString}: ${localizedApparent_disp}` : ''}
             ${this.config.aqi_sensor && aqi !== null ? html`<br><aqi style="background-color: ${aqiColor}">${aqi} ${aqiString}</aqi>` : ''}
           </clock-weather-card-today-right-wrap-top>
           <clock-weather-card-today-right-wrap-center>
-            ${this.config.hide_clock ? localizedTemp ?? 'n/a' : this.time()}
+            ${this.config.hide_clock ? localizedTemp_disp ?? 'n/a' : this.time()}
           </clock-weather-card-today-right-wrap-center>
           <clock-weather-card-today-right-wrap-bottom>
             ${this.config.hide_date ? '' : this.date()}
@@ -248,7 +252,8 @@ export class ClockWeatherCard extends LitElement {
 
   private renderForecast (): TemplateResult[] {
     const weather = this.getWeather()
-    const currentTemp = this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
+    const currentTemp = this.getCurrentTemperature !== null ? this.getCurrentTemperature : null
+	const currentTemp_disp = this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
     const maxRowsCount = this.config.forecast_rows
     const hourly = this.config.hourly_forecast
     const temperatureUnit = weather.attributes.temperature_unit
@@ -261,8 +266,8 @@ export class ClockWeatherCard extends LitElement {
       minTemps.push(currentTemp)
       maxTemps.push(currentTemp)
     }
-    const minTemp = Math.round(min(minTemps))
-    const maxTemp = Math.round(max(maxTemps))
+    const minTemp = (min(minTemps))
+    const maxTemp = (max(maxTemps))
 
     const gradientRange = this.gradientRange(minTemp, maxTemp, temperatureUnit)
 
@@ -309,7 +314,7 @@ export class ClockWeatherCard extends LitElement {
     `
   }
 
-  private renderForecastTemperatureBar (gradientRange: Rgb[], minTemp: number, maxTemp: number, minTempDay: number, maxTempDay: number, isNow: boolean, currentTemp: number | null): TemplateResult {
+  private renderForecastTemperatureBar (gradientRange: Rgb[], minTemp: number, maxTemp: number, minTempDay: number, maxTempDay: number, isNow: boolean, currentTemp_disp: number | null): TemplateResult {
     const { startPercent, endPercent } = this.calculateBarRangePercents(minTemp, maxTemp, minTempDay, maxTempDay)
     const moveRight = maxTemp === minTemp ? 0 : (minTempDay - minTemp) / (maxTemp - minTemp)
     return html`
@@ -322,14 +327,14 @@ export class ClockWeatherCard extends LitElement {
             endPercent
           )};"
         >
-          ${isNow ? this.renderForecastCurrentTemp(minTempDay, maxTempDay, currentTemp) : ''}
+          ${isNow ? this.renderForecastCurrentTemp(minTempDay, maxTempDay, currentTemp_disp) : ''}
         </forecast-temperature-bar-range>
       </forecast-temperature-bar>
     `
   }
 
-  private renderForecastCurrentTemp (minTempDay: number, maxTempDay: number, currentTemp: number | null): TemplateResult {
-    if (currentTemp == null) {
+  private renderForecastCurrentTemp (minTempDay: number, maxTempDay: number, currentTemp_disp: number | null): TemplateResult {
+    if (currentTemp_disp == null) {
       return html``
     }
     const indicatorPosition = minTempDay === maxTempDay ? 0 : (100 / (maxTempDay - minTempDay)) * (currentTemp - minTempDay)
