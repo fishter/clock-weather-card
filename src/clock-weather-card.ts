@@ -209,10 +209,10 @@ export class ClockWeatherCard extends LitElement {
   private renderToday (): TemplateResult {
     const weather = this.getWeather()
     const state = weather.state
-    const temp = this.getCurrentTemperature() !== null ? this.getCurrentTemperature() : null
+    const temp = this.getCurrentTemperature() !== null ? this.getCurrentTemperature() : -273
     const temp_disp = this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
     const tempUnit = weather.attributes.temperature_unit
-    const apparentTemp = this.getApparentTemperature() !== null ? this.getApparentTemperature() : null
+    const apparentTemp = this.getApparentTemperature() !== null ? this.getApparentTemperature() : -273
     const apparentTemp_disp = this.config.show_decimal ? this.getApparentTemperature() : roundIfNotNull(this.getApparentTemperature())
     const aqi = this.getAqi()
     const aqiColor = this.getAqiColor(aqi)
@@ -220,11 +220,11 @@ export class ClockWeatherCard extends LitElement {
     const iconType = this.config.weather_icon_type
     const icon = this.toIcon(state, iconType, false, this.getIconAnimationKind())
     const weatherString = this.localize(`weather.${state}`)
-    const localizedTemp = temp !== null ? this.toConfiguredTempWithUnit(tempUnit, temp) : null
-    const localizedTemp_disp = temp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, temp) : null
-    const localizedHumidity = humidity !== null ? `${humidity}% ${this.localize('misc.humidity')}` : null
-    const localizedApparent = apparentTemp !== null ? this.toConfiguredTempWithUnit(tempUnit, apparentTemp) : null
-    const localizedApparent_disp = apparentTemp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, apparentTemp) : null
+    const localizedTemp = temp !== null ? this.toConfiguredTempWithUnit(tempUnit, temp) : -273
+    const localizedTemp_disp = temp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, temp) : -273
+    const localizedHumidity = humidity !== null ? `${humidity}% ${this.localize('misc.humidity')}` : -1
+    const localizedApparent = apparentTemp !== null ? this.toConfiguredTempWithUnit(tempUnit, apparentTemp) : -273
+    const localizedApparent_disp = apparentTemp_disp !== null ? this.toConfiguredTempWithUnit(tempUnit, apparentTemp) : -273
     const apparentString = this.localize('misc.feels-like')
     const aqiString = this.localize('misc.aqi')
 
