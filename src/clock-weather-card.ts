@@ -209,9 +209,9 @@ export class ClockWeatherCard extends LitElement {
   private renderToday (): TemplateResult {
     const weather = this.getWeather()
     const state = weather.state
-    const temp = this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
+    const temp = (this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
     const tempUnit = weather.attributes.temperature_unit
-    const apparentTemp = this.config.show_decimal ? this.getApparentTemperature() : roundIfNotNull(this.getApparentTemperature())
+    const apparentTemp = (this.config.show_decimal ? this.getApparentTemperature() : roundIfNotNull(this.getApparentTemperature())
     const aqi = this.getAqi()
     const aqiColor = this.getAqiColor(aqi)
     const humidity = roundIfNotNull(this.getCurrentHumidity())
