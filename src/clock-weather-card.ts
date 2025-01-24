@@ -248,7 +248,7 @@ export class ClockWeatherCard extends LitElement {
 
   private renderForecast (): TemplateResult[] {
     const weather = this.getWeather()
-    const currentTemp = roundIfNotNull(this.getCurrentTemperature())
+    const currentTemp = this.config.show_decimal ? this.getCurrentTemperature() : roundIfNotNull(this.getCurrentTemperature())
     const maxRowsCount = this.config.forecast_rows
     const hourly = this.config.hourly_forecast
     const temperatureUnit = weather.attributes.temperature_unit
@@ -279,8 +279,8 @@ export class ClockWeatherCard extends LitElement {
     const weatherIcon = this.toIcon(weatherState, 'fill', true, 'static')
     const tempUnit = this.getWeather().attributes.temperature_unit
     const isNow = hourly ? DateTime.now().hour === forecast.datetime.hour : DateTime.now().day === forecast.datetime.day
-    const minTempDay = Math.round(isNow && currentTemp !== null ? Math.min(currentTemp, forecast.templow) : forecast.templow)
-    const maxTempDay = Math.round(isNow && currentTemp !== null ? Math.max(currentTemp, forecast.temperature) : forecast.temperature)
+    const minTempDay =  this.config.show_decimal ? (isNow && currentTemp !== null ? Math.min(currentTemp, forecast.templow) : forecast.templow) : (Math.round(isNow && currentTemp !== null ? Math.min(currentTemp, forecast.templow) : forecast.templow))
+    const maxTempDay = this.config.show_decimal ? (isNow && currentTemp !== null ? Math.max(currentTemp, forecast.temperature) : forecast.temperature) : (Math.round(isNow && currentTemp !== null ? Math.max(currentTemp, forecast.temperature) : forecast.temperature))
 
     return html`
       <clock-weather-card-forecast-row style="--col-one-size: ${(maxColOneChars * 0.5)}rem;">
